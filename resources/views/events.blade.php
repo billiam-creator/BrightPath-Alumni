@@ -1,12 +1,19 @@
 @extends('layout.frontend')
 
 @section('content')
-<!-- Font Awesome CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <div class="container-fluid" style="background-color: white; min-height: 100vh; padding: 60px 0;">
     <div class="container">
-        <!-- Header Section -->
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                {{ session('success') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        @endif
+
         <div class="row mb-5">
             <div class="col-12 text-center">
                 <div class="mb-4" style="display: inline-block; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);">
@@ -41,11 +48,9 @@
                         onmouseover="this.style.transform='translateY(-10px)'; this.style.boxShadow='0 15px 40px rgba(0,0,0,0.15)'"
                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(0,0,0,0.1)'">
                             
-                            <!-- Card Top Border -->
                             <div style="height: 5px; background: linear-gradient(90deg, #007bff, #6f42c1, #e83e8c); position: absolute; top: 0; left: 0; right: 0;"></div>
                             
                             <div class="card-body p-4" style="padding-top: 2rem !important;">
-                                <!-- Event Title -->
                                 <h2 class="card-title h4 font-weight-bold mb-3" style="
                                     color: #2c3e50;
                                     line-height: 1.3;
@@ -54,7 +59,6 @@
                                     {{ $event->title }}
                                 </h2>
                                 
-                                <!-- Event Description -->
                                 <p class="card-text mb-4" style="
                                     color: #6c757d;
                                     font-size: 0.95rem;
@@ -65,9 +69,7 @@
                                     {{ Str::limit($event->description, 100) }}
                                 </p>
                                 
-                                <!-- Event Details -->
                                 <div class="mt-auto">
-                                    <!-- Location -->
                                     <div class="d-flex align-items-center mb-3" style="
                                         padding: 12px 16px;
                                         background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -92,7 +94,6 @@
                                         </span>
                                     </div>
                                     
-                                    <!-- Date -->
                                     <div class="d-flex align-items-center mb-3" style="
                                         padding: 12px 16px;
                                         background: linear-gradient(135deg, #f8f9fa, #e9ecef);
@@ -123,33 +124,39 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Hover Button -->
-                                <div class="text-center mt-4" style="opacity: 0; transition: opacity 0.3s ease;" onmouseover="this.parentElement.querySelector('.hover-btn').style.opacity='1'" onmouseout="this.parentElement.querySelector('.hover-btn').style.opacity='0'">
-                                    <button class="btn btn-primary hover-btn" style="
+                                <div class="d-flex justify-content-between mt-4">
+                                    <a href="{{ route('donate.to.event', $event->id) }}" class="btn btn-success" style="
+                                        background: linear-gradient(135deg, #28a745, #218838);
+                                        border: none;
+                                        border-radius: 25px;
+                                        padding: 10px 20px;
+                                        font-weight: 600;
+                                        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+                                        transition: all 0.3s ease;
+                                    ">
+                                        <i class="fas fa-hand-holding-usd mr-2"></i>Donate
+                                    </a>
+                                    <a href="{{ route('join.event', $event->id) }}" class="btn btn-primary" style="
                                         background: linear-gradient(135deg, #007bff, #6f42c1);
                                         border: none;
                                         border-radius: 25px;
-                                        padding: 10px 25px;
+                                        padding: 10px 20px;
                                         font-weight: 600;
                                         box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
                                         transition: all 0.3s ease;
                                     ">
-                                        <i class="fas fa-info-circle mr-2"></i>Learn More
-                                    </button>
+                                        <i class="fas fa-user-plus mr-2"></i>Join Event
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
-            
-
         @else
-            <!-- Empty State -->
             <div class="row">
                 <div class="col-12">
                     <div class="text-center py-5" style="min-height: 400px; display: flex; flex-direction: column; justify-content: center;">
-                        <!-- Empty State Icon -->
                         <div class="mb-4" style="
                             width: 150px;
                             height: 150px;

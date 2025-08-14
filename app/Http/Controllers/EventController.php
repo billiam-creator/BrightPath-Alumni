@@ -7,68 +7,38 @@ use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    // 🔒 Dashboard: list all events
+    /**
+     * Display a listing of the events.
+     *
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
-        $events = Event::latest()->get();
-        return view('dashboard.events.index', compact('events'));
-    }
-
-    // 🔒 Dashboard: show form to create a new event
-    public function create()
-    {
-        return view('dashboard.events.create');
-    }
-
-    // 🔒 Dashboard: store a new event
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date' => 'required|date',
-        ]);
-
-        Event::create($request->all());
-
-        return redirect()->route('dashboard.events.index')->with('success', 'Event created successfully.');
-    }
-
-    // 🔒 Dashboard: show form to edit an event
-    public function edit($id)
-    {
-        $event = Event::findOrFail($id);
-        return view('dashboard.events.edit', compact('event'));
-    }
-
-    // 🔒 Dashboard: update the event
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'date' => 'required|date',
-        ]);
-
-        $event = Event::findOrFail($id);
-        $event->update($request->all());
-
-        return redirect()->route('dashboard.events.index')->with('success', 'Event updated successfully.');
-    }
-
-    // 🔒 Dashboard: delete an event
-    public function destroy($id)
-    {
-        $event = Event::findOrFail($id);
-        $event->delete();
-
-        return redirect()->route('dashboard.events.index')->with('success', 'Event deleted successfully.');
-    }
-
-    // 🌐 Frontend: show public list of events
-    public function showPublicEvents()
-    {
-        $events = Event::latest()->get();
+        $events = Event::orderBy('date', 'desc')->get();
         return view('events', compact('events'));
+    }
+    
+    // This is the new method for the 'Join Event' button.
+    public function join(Event $event)
+    {
+        // Here you would add the logic to register a user for an event.
+        // For example, you might create a new entry in a 'registrations' table.
+        // After processing, you would redirect the user with a success message.
+        
+        // Example: Assume you have an 'attendees' relationship on your Event model.
+        // $event->attendees()->attach(auth()->id());
+        
+        return redirect()->route('frontend.events.index')->with('success', 'You have successfully joined the event!');
+    }
+
+    // This is the new method for the 'Donate' button.
+    public function donate(Event $event)
+    {
+        // Here you would add the logic for a donation process.
+        // This might involve redirecting to a payment gateway or
+        // displaying a donation form specific to the event.
+        
+        // For now, let's just redirect with a message.
+        return redirect()->route('frontend.events.index')->with('success', 'Thank you for your interest in donating to this event!');
     }
 }
